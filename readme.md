@@ -7,7 +7,6 @@ JSONEventLayout 实现log4jjson格式日志输出
 ### flume ###
 log4j.appender.flume=org.apache.flume.clients.log4jappender.Log4jExtAppender
 log4j.appender.flume.Threshold=INFO
-#log4j.appender.flume.layout=org.apache.log4j.PatternLayout
 log4j.appender.flume.layout=cn.yh.log4j.JSONEventLayout
 log4j.appender.flume.layout.UserFields=user_id,event_type,log_type,log_body,level,timestamp,request_body,remote_addr,response_body,time_consuming,request_uri,status
 log4j.appender.flume.layout.UserFieldValues=log_source:1
