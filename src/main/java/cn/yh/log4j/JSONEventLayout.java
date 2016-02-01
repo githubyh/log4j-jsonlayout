@@ -1,7 +1,9 @@
 package cn.yh.log4j;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +15,7 @@ import org.apache.log4j.spi.ThrowableInformation;
 
 import cn.yh.log4j.data.HostData;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public class JSONEventLayout extends Layout {
@@ -55,7 +58,7 @@ public class JSONEventLayout extends Layout {
      * in the log messages.
      */
     public JSONEventLayout() {
-        this(true);
+        this(false);
     }
 
     /**
@@ -75,15 +78,15 @@ public class JSONEventLayout extends Layout {
 //        ndc = loggingEvent.getNDC();
 
         logstashEvent = new JSONObject();
-        String whoami = this.getClass().getSimpleName();
+//        String whoami = this.getClass().getSimpleName();
 
         /**
          * All v1 of the event format requires is
          * "@timestamp" and "@version"
          * Every other field is arbitrary
          */
-        logstashEvent.put("@version", version);
-        logstashEvent.put("@timestamp", dateFormat(timestamp));
+        logstashEvent.put("version", version);
+        logstashEvent.put("timestamp", dateFormat(timestamp));
 
          
         if (StringUtils.isNotBlank(userFieldValues)) {
@@ -94,11 +97,26 @@ public class JSONEventLayout extends Layout {
         /**
          * Now we start injecting our own stuff.
          */
-        logstashEvent.put("source_host", hostname);
+        logstashEvent.put("hostName", hostname);
         
         String renderedmsg = loggingEvent.getRenderedMessage();
-        logstashEvent.put("log_body", renderedmsg);
-
+//        logstashEvent.put("logBody", renderedmsg);
+        if(StringUtils.isNotBlank(renderedmsg)){
+			try{
+				JSONObject bodyjsonObj = JSON.parseObject(renderedmsg);
+				Set<String> setstr = bodyjsonObj.keySet();  
+		        Iterator it = setstr.iterator();
+		        while(it.hasNext()){  
+		            String fieldkey = it.next().toString();
+		            if(!logstashEvent.containsKey(fieldkey)){
+			            Object o =bodyjsonObj.get(fieldkey);
+			            logstashEvent.put(fieldkey, o==null?"":o.toString());
+		            }
+		        }  
+			}catch(Exception e){//logger.debug(key + " is not a legitimate JSON !") ;
+//				e.printStackTrace();
+			}
+		}
         if (loggingEvent.getThrowableInformation() != null) {
             final ThrowableInformation throwableInformation = loggingEvent.getThrowableInformation();
             if (throwableInformation.getThrowable().getClass().getCanonicalName() != null) {
@@ -120,13 +138,14 @@ public class JSONEventLayout extends Layout {
             addEventData("line_number", info.getLineNumber());
             addEventData("class", info.getClassName());
             addEventData("method", info.getMethodName());
+            
+          addEventData("logger_name", loggingEvent.getLoggerName());
+          addEventData("mdc", mdc);
+          addEventData("ndc", ndc);
+          
+          addEventData("level", loggingEvent.getLevel().toString());
+          addEventData("thread_name", threadName);
         }
-
-        addEventData("logger_name", loggingEvent.getLoggerName());
-        addEventData("mdc", mdc);
-        addEventData("ndc", ndc);
-        addEventData("level", loggingEvent.getLevel().toString());
-        addEventData("thread_name", threadName);
 
         return logstashEvent.toString() + "\n";
     }
