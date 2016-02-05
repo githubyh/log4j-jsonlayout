@@ -129,38 +129,7 @@ public class LogBean implements Serializable{
 		this.status = status;
 	}
 	 
-	@Override
-	public String toString() {
-		/*StringBuffer str = new StringBuffer();
-		str.append("{\"userId\":").append(userId)
-		.append(",\"eventType\":").append(eventType)
-		.append(",\"logType\":").append(logType)
-		.append(",\"logSource\":").append(logSource)
-		.append(",\"logBody\":").append(logBody)
-		.append(",\"level\":").append(level)
-		.append(",\"timestamp\":").append(timestamp)
-		.append(",\"remoteAddr\":").append(remoteAddr)
-		.append(",\"requestBody\":").append(requestBody)
-		.append(",\"browser\":").append(browser)
-		.append(",\"responseBody\":").append(responseBody)
-		.append(",\"timeConsuming\":").append(timeConsuming)
-		.append(",\"requestUri\":").append(requestUri)
-		.append(",\"status\":").append(status).append("\"}");
-		return str.toString();*/
-		ObjectMapper o = new ObjectMapper();
-    	try {
-			 return o.writeValueAsString(this) ;
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}return null;
-	} 
+	 
 	public LogBean(){}
 	public LogBean(String userId, String eventType, String logType,
 			String logSource, String logBody, String level, String timestamp,

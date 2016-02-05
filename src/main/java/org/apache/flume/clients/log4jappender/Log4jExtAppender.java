@@ -74,14 +74,15 @@ public class Log4jExtAppender extends AppenderSkeleton {
         this.source = source;  
     }  
   
+    private int maxIoWorker = 0;  
     private boolean unsafeMode = false;  
     private long timeout = RpcClientConfigurationConstants.DEFAULT_REQUEST_TIMEOUT_MILLIS;  
     private boolean avroReflectionEnabled;  
     private String avroSchemaUrl;  
   
     RpcClient rpcClient = null;  
-  
-    /** 
+   
+	/** 
      * If this constructor is used programmatically rather than from a log4j 
      * conf you must set the <tt>port</tt> and <tt>hostname</tt> and then call 
      * <tt>activateOptions()</tt> before calling <tt>append()</tt>. 
@@ -106,7 +107,15 @@ public class Log4jExtAppender extends AppenderSkeleton {
         this.source = source;  
     }  
   
-    /** 
+    public int getMaxIoWorker() {
+		return maxIoWorker;
+	}
+
+	public void setMaxIoWorker(int maxIoWorker) {
+		this.maxIoWorker = maxIoWorker;
+	}
+
+	/** 
      * Append the LoggingEvent, to send to the first Flume hop. 
      *  
      * @param event 
@@ -124,14 +133,21 @@ public class Log4jExtAppender extends AppenderSkeleton {
         if (rpcClient == null) {  
             String errorMsg = "Cannot Append to Appender! Appender either closed or"  
                     + " not setup correctly!";  
-            LogLog.error(errorMsg);  
+            LogLog.error(errorMsg); 
+            
             if (unsafeMode) {  
+            	
                 return;  
-            }  
-            throw new FlumeException(errorMsg);  
-        }  
+            }else{
+//					if (!rpcClient.isActive()) {  
+//			            reconnect();  
+//			        }  
+            }
+            return;
+//            throw new FlumeException(errorMsg);  
+        }else{  
   
-        if (!rpcClient.isActive()) {  
+        if (rpcClient != null && !rpcClient.isActive()) {  
             reconnect();  
         }  
   
@@ -172,16 +188,23 @@ public class Log4jExtAppender extends AppenderSkeleton {
                     hdrs);  
         }  
   
-        try {  
-            rpcClient.append(flumeEvent);  
+        try {
+        	if(rpcClient != null)
+            rpcClient.append(flumeEvent);
+        	else
+        		close();
         } catch (EventDeliveryException e) {  
             String msg = "Flume append() failed.";  
             LogLog.error(msg);  
+//            e.printStackTrace();
+//            close();
             if (unsafeMode) {  
                 return;  
             }  
-            throw new FlumeException(msg + " Exception follows.", e);  
+            return;
+           // throw new FlumeException(msg + " Exception follows.", e);  
         }  
+        }
     }  
   
     private Schema schema;  
@@ -239,7 +262,7 @@ public class Log4jExtAppender extends AppenderSkeleton {
                 if (unsafeMode) {  
                     return;  
                 }  
-                throw ex;  
+//                throw ex;  
             } finally {  
                 rpcClient = null;  
             }  
@@ -249,7 +272,7 @@ public class Log4jExtAppender extends AppenderSkeleton {
             if (unsafeMode) {  
                 return;  
             }  
-            throw new FlumeException(errorMsg);  
+//            throw new FlumeException(errorMsg);  
         }  
     }  
   
@@ -325,7 +348,7 @@ public class Log4jExtAppender extends AppenderSkeleton {
                 String.valueOf(timeout));  
         props.setProperty(  
                 RpcClientConfigurationConstants.CONFIG_REQUEST_TIMEOUT,  
-                String.valueOf(timeout));  
+                String.valueOf(timeout));   
         try {  
             rpcClient = RpcClientFactory.getInstance(props);  
             if (layout != null) {  
@@ -334,10 +357,11 @@ public class Log4jExtAppender extends AppenderSkeleton {
         } catch (FlumeException e) {  
             String errormsg = "RPC client creation failed! " + e.getMessage();  
             LogLog.error(errormsg);  
+//            e.printStackTrace();
             if (unsafeMode) {  
                 return;  
             }  
-            throw e;  
+//            throw e;  
         }  
     }  
   

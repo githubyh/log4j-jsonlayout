@@ -36,12 +36,13 @@ public class WriteLog {
                 	log.setLogType("1");
                 	log.setRequestUri("product/add.do");
                 	log.setUserId("2652");
+                	log.setLogBody("We are Chinese, Taiwan is China.");
                 	log.setTimestamp(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
                 	log.setTimeConsuming(String.valueOf(new Random().nextInt(23456)));
                 	
                 	while (true) {  
                 	        //每隔两秒log输出一下当前系统时间戳  
-                	            logger.info(log);  
+                	            logger.info(log.toString());  
 //                	            Thread.sleep(50);
                 	            count ++ ;
                 	        } 
