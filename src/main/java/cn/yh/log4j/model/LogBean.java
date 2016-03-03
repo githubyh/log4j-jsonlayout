@@ -152,7 +152,25 @@ public class LogBean implements Serializable{
 		this.requestUri = requestUri;
 		this.status = status;
 	}
-
+	@Override
+	public String toString() {
+		StringBuffer str = new StringBuffer();
+		str.append("{\"userId\":\"").append(userId==null?"":userId)
+		.append("\",\"eventType\":\"").append(eventType==null?"":eventType)
+		.append("\",\"logType\":\"").append(logType==null?"":logType)
+		.append("\",\"logSource\":\"").append(logSource==null?"":logSource)
+		.append("\",\"logBody\":\"").append(logBody==null?"":logBody)
+		.append("\",\"level\":\"").append(level==null?"":level)
+		.append("\",\"timestamp\":\"").append(timestamp==null?"":timestamp)
+		.append("\",\"remoteAddr\":\"").append(remoteAddr==null?"":remoteAddr)
+		.append("\",\"requestBody\":\"").append(requestBody==null?"":requestBody)
+		.append("\",\"browser\":\"").append(browser==null?"":browser)
+		.append("\",\"responseBody\":\"").append(responseBody==null?"":responseBody)
+		.append("\",\"timeConsuming\":\"").append(timeConsuming==null?"":timeConsuming)
+		.append("\",\"requestUri\":\"").append(requestUri==null?"":requestUri)
+		.append("\",\"status\":\"").append(status==null?"":status).append("\"}");
+		return str.toString();
+	}
 	
 	
 	

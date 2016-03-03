@@ -42,7 +42,7 @@ public class WriteLog {
                 	
                 	while (true) {  
                 	        //每隔两秒log输出一下当前系统时间戳  
-                	            logger.info(log.toString());  
+                	            logger.info(log);  
 //                	            Thread.sleep(50);
                 	            count ++ ;
                 	        } 
