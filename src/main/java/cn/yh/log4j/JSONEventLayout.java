@@ -41,7 +41,7 @@ public class JSONEventLayout extends Layout {
     private JSONObject logstashEvent;
 
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
-    public static final FastDateFormat ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+    public static final FastDateFormat ISO_DATETIME_TIME_ZONE_FORMAT_WITH_MILLIS = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 //    public static final String ADDITIONAL_DATA_PROPERTY = "net.logstash.log4j.JSONEventLayout.UserFields";
 
     public static String dateFormat(long timestamp) {
@@ -85,8 +85,8 @@ public class JSONEventLayout extends Layout {
          * "@timestamp" and "@version"
          * Every other field is arbitrary
          */
-        logstashEvent.put("version", version);
-        logstashEvent.put("timestamp", dateFormat(timestamp));
+        logstashEvent.put("@version", version);
+        logstashEvent.put("@timestamp", dateFormat(timestamp));
 
          
         if (StringUtils.isNotBlank(userFieldValues)) {

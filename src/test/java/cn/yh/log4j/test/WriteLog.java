@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang.time.FastDateFormat;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.impl.cookie.DateUtils;
@@ -37,14 +38,22 @@ public class WriteLog {
                 	log.setRequestUri("product/add.do");
                 	log.setUserId("2652");
                 	log.setLogBody("We are Chinese, Taiwan is China.");
-                	log.setTimestamp(DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
+                	FastDateFormat format = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                	log.setTimestamp(format.format(new Date()));
                 	log.setTimeConsuming(String.valueOf(new Random().nextInt(23456)));
                 	
                 	while (true) {  
+                		Random ra =new Random();
                 	        //每隔两秒log输出一下当前系统时间戳  
-                	            logger.info(log);  
+                	            logger.info(log.toString());  
 //                	            Thread.sleep(50);
                 	            count ++ ;
+                	            try {
+									Thread.sleep(ra.nextInt(50));
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
                 	        } 
                 }
             });
