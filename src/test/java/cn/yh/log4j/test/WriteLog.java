@@ -42,7 +42,7 @@ public class WriteLog {
                 		Random ra =new Random();
                 	        //每隔两秒log输出一下当前系统时间戳  
 //                				ThlogClient.info(log);
-                		LogClient.info("product/update.do", "支付配送方式修改", String.valueOf(ra.nextInt(10000)), "ie", "修改成功");
+                		LogClient.info("product/update.do", "支付配送方式修改", String.valueOf(ra.nextInt(10000)), "ie", "修改成功",String.valueOf(ra.nextInt(1000)));
 //                	            Thread.sleep(50);
                 	            count ++ ;
                 	            try {

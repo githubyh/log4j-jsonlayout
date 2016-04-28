@@ -31,18 +31,43 @@ public class LogClient {
      * @param header
      * @param body
      */
-    public static void warn(String requestUri, String eventType , String userId, String browser,String body) {
+    public static void warn(String requestUri, String eventType , String userId, String browser,String body, String timeConsuming) {
     	LogBean log = new LogBean();
     	log.setBrowser(browser);
+    	log.setLevel("warn");
     	log.setEventType(eventType);
 //    	log.setLogType("2");
     	log.setRequestUri(requestUri);
     	log.setUserId(userId);
     	log.setLogBody(body);
+    	log.setTimeConsuming(timeConsuming);
     	FastDateFormat format = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     	log.setTimestamp(format.format(new Date()));
     	log.setTimeConsuming(String.valueOf(new Random().nextInt(23456)));
     	logger.warn(log.toString());
+    }
+    
+    /**
+     * 警告日志
+     *
+     * @param header
+     * @param body
+     */
+    public static void warn(String requestUri, String requestBody, String eventType ,String responseBody, String remoteAddr,String timeConsuming, String status) {
+    	LogBean log = new LogBean();
+    	log.setLevel("warn");
+    	log.setEventType(eventType);
+//    	log.setLogType("2");
+    	log.setRequestUri(requestUri);
+    	log.setRequestBody(requestBody);
+    	log.setRemoteAddr(remoteAddr);
+    	log.setStatus(status);
+    	log.setResponseBody(responseBody);
+    	log.setTimeConsuming(timeConsuming);
+    	FastDateFormat format = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    	log.setTimestamp(format.format(new Date()));
+    	log.setTimeConsuming(String.valueOf(new Random().nextInt(23456)));
+    	logger.info(log.toString());
     }
     
     /**
@@ -70,14 +95,38 @@ public class LogClient {
      * @param header
      * @param body
      */
-    public static void info(String requestUri, String eventType , String userId, String browser,String body) {
+    public static void info(String requestUri, String requestBody, String eventType ,String responseBody, String remoteAddr,String timeConsuming, String status) {
+    	LogBean log = new LogBean();
+    	log.setLevel("info");
+    	log.setEventType(eventType);
+//    	log.setLogType("2");
+    	log.setRequestUri(requestUri);
+    	log.setRequestBody(requestBody);
+    	log.setRemoteAddr(remoteAddr);
+    	log.setStatus(status);
+    	log.setResponseBody(responseBody);
+    	log.setTimeConsuming(timeConsuming);
+    	FastDateFormat format = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    	log.setTimestamp(format.format(new Date()));
+    	log.setTimeConsuming(String.valueOf(new Random().nextInt(23456)));
+    	logger.info(log.toString());
+    }
+    /**
+     * 警告日志
+     *
+     * @param header
+     * @param body
+     */
+    public static void info(String requestUri, String eventType , String userId, String browser,String body,String timeConsuming) {
     	LogBean log = new LogBean();
     	log.setBrowser(browser);
+    	log.setLevel("info");
     	log.setEventType(eventType);
 //    	log.setLogType("2");
     	log.setRequestUri(requestUri);
     	log.setUserId(userId);
     	log.setLogBody(body);
+    	log.setTimeConsuming(timeConsuming);
     	FastDateFormat format = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
     	log.setTimestamp(format.format(new Date()));
     	log.setTimeConsuming(String.valueOf(new Random().nextInt(23456)));
